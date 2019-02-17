@@ -146,6 +146,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+
+
+      cylib_gcoder_polling();//G代码解析
   }
   /* USER CODE END 3 */
 }
@@ -213,6 +217,19 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   }
 
 
+
+}
+
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == USART1){
+    cylib_serial_rx_callback(0);
+  }else if (huart->Instance == USART2){
+    cylib_serial_rx_callback(1);
+  }else if (huart->Instance == USART3){
+    cylib_serial_rx_callback(2);
+  }
 
 }
 
