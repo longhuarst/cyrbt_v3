@@ -130,12 +130,130 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 
-    cylib_init();//åˆå§‹åŒ–CYLIBåº“
+    cylib_init();//åˆå§‹åŒ–CYLIBåº?
+	
+	
+	
+	
+	while (cylib_angle_wait_init() != 0x7u){
+		
+		printf("wait angle sensors inited !\r\n");
+		HAL_Delay(1000);
+		
+		
+	}
+	printf("all angle sensors has been inited !\r\n");
 
+//	cylib_step_motor_run_async_motor0(20,10000);
+//	cylib_step_motor_run_async_motor1(20,10000);
+	
+	//µç»úĞ£×¼ ¡¾Ë®Æ½¡¿
+	if (cylib_switch_get_status(3) == false){
+		//Ğı×ª180*1.2¶È
+		cylib_step_motor_run_async_motor2(100,-128000*1.2);
+		
+		while(cylib_switch_get_status(3) == false);
+	
+		NVIC_SystemReset();		
+	}
+	
+	HAL_Delay(12000);//µÈ´ı12Ãë ¹ßµ¼ÎÈ¶¨
+	
+	//ÏÈĞ£×¼ÄÚµç»ú
+	for (int i=0;i<10;++i)
+	{
+		//¶ÁÈ¡¹ßµ¼0Êı¾İ
+		float angle = 0.0f;
+		while (cylib_angle_get(0,&angle) == false);
+		printf("motor1 angle =  %f\r\n",angle);
+		
+		//µç»ú2 ½Ç¶ÈÎª 45¶È
+		int32_t step = (45.0f - angle ) / 0.00046875f;
+		
+		printf("error degree = %f , step = %d\r\n",45-angle, step);
+		
+		cylib_step_motor_run_async_motor1(100,step);
+		
+		cylib_step_motor_block_wait_for_all();//µÈ´ıµç»úÍê³É
+		
+		printf("motor1 complete \r\n");
+	}
+	
+	printf("-------------------- \r\n");
+	
+	//µç»úĞ£×¼Íâµç»ú
+	for (int i=0;i<10;++i)
+	{
+		//¶ÁÈ¡¹ßµ¼0Êı¾İ
+		float angle = 0.0f;
+		while (cylib_angle_get(1,&angle) == false);
+		printf("motor0 angle =  %f\r\n",angle);
+		
+		//µç»ú2 ½Ç¶ÈÎª 45¶È
+		int32_t step = -(-45.0f - angle ) / 0.00046875f;
+		
+		printf("error degree = %f , step = %d\r\n",-45-angle, step);
+		
+		cylib_step_motor_run_async_motor0(100,step);
+		
+		cylib_step_motor_block_wait_for_all();//µÈ´ıµç»úÍê³É
+		
+		printf("motor0 complete \r\n");
+	}
+	
+	printf("-----------------\r\n");
+	
+	for (int i=0;i<10;++i){
+		HAL_Delay(1000);
+		printf("angle 0 = %f\r\n",cylib_angle[0].y);
+		printf("angle 1 = %f\r\n",cylib_angle[1].y);
+		printf("angle 2 = %f\r\n",cylib_angle[2].y);
 
-
-
-
+	}
+	
+	
+	//Çå³ı×ø±ê
+	cylib_location_set(0,0,0,0);
+	
+	
+	//-------------------------Ğ£×¼Íê±Ï----------------
+	
+	
+	
+	
+	while(1){
+		HAL_Delay(1000);
+		
+		if (cylib_switch_get_status(0)){
+			printf("sw0 on\r\n");
+		}else{
+			printf("sw0 off\r\n");
+		}
+		
+		if (cylib_switch_get_status(1)){
+			printf("sw1 on\r\n");
+		}else{
+			printf("sw1 off\r\n");
+		}
+		
+		if (cylib_switch_get_status(2)){
+			printf("sw2 on\r\n");
+		}else{
+			printf("sw2 off\r\n");
+		}
+		
+		if (cylib_switch_get_status(3)){
+			printf("sw3 on\r\n");
+		}else{
+			printf("sw3 off\r\n");
+		}
+		
+	}
+	
+	
+//	cylib_step_motor_run_async_motor0(20,10000);
+//	cylib_step_motor_run_async_motor1(20,10000);
+//	cylib_step_motor_run_async_motor1(200,10000);
 
   /* USER CODE END 2 */
 

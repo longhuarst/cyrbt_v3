@@ -26,16 +26,16 @@ cylib_step_motor_def cylib_step_motor = {
         .instance = {
                 {
                         .pin = {
-                                .clk    = {.port = STEP_CH1_CLK_GPIO_Port,      .pin = STEP_CH1_CLK_Pin},
-                                .dir    = {.port = STEP_CH1_DIR_GPIO_Port,      .pin = STEP_CH1_DIR_Pin},
-                                .en     = {.port = STEP_CH1_EN_GPIO_Port,       .pin = STEP_CH1_EN_Pin},
-                                .m1     = {.port = STEP_CH1_M1_GPIO_Port,       .pin = STEP_CH1_M1_Pin},
-                                .m2     = {.port = STEP_CH1_M2_GPIO_Port,       .pin = STEP_CH1_M2_Pin},
-                                .m3     = {.port = STEP_CH1_M3_GPIO_Port,       .pin = STEP_CH1_M3_Pin},
-                                .reset  = {.port = STEP_CH1_RESET_GPIO_Port,    .pin = STEP_CH1_RESET_Pin},
-                                .st     = {.port = STEP_CH1_ST_GPIO_Port,       .pin = STEP_CH1_ST_Pin},
+                                .clk    = {.port = STEP_CH4_CLK_GPIO_Port,      .pin = STEP_CH4_CLK_Pin},
+                                .dir    = {.port = STEP_CH4_DIR_GPIO_Port,      .pin = STEP_CH4_DIR_Pin},
+                                .en     = {.port = STEP_CH4_EN_GPIO_Port,       .pin = STEP_CH4_EN_Pin},
+                                .m1     = {.port = STEP_CH4_M1_GPIO_Port,       .pin = STEP_CH4_M1_Pin},
+                                .m2     = {.port = STEP_CH4_M2_GPIO_Port,       .pin = STEP_CH4_M2_Pin},
+                                .m3     = {.port = STEP_CH4_M3_GPIO_Port,       .pin = STEP_CH4_M3_Pin},
+                                .reset  = {.port = STEP_CH4_RESET_GPIO_Port,    .pin = STEP_CH4_RESET_Pin},
+                                .st     = {.port = STEP_CH4_ST_GPIO_Port,       .pin = STEP_CH4_ST_Pin},
                         },
-                        .state = cylib_step_motor_state_init,
+                        .state = cylib_step_motor_state_free,
                         .step_sp = 0,
                         .step_cb = 0,
                         .step_error = 0,
@@ -48,16 +48,16 @@ cylib_step_motor_def cylib_step_motor = {
                         .step_degree_error = 0.0f,
                 }, {
                         .pin = {
-                                .clk    = {.port = STEP_CH2_CLK_GPIO_Port,      .pin = STEP_CH2_CLK_Pin},
-                                .dir    = {.port = STEP_CH2_DIR_GPIO_Port,      .pin = STEP_CH2_DIR_Pin},
-                                .en     = {.port = STEP_CH2_EN_GPIO_Port,       .pin = STEP_CH2_EN_Pin},
-                                .m1     = {.port = STEP_CH2_M1_GPIO_Port,       .pin = STEP_CH2_M1_Pin},
-                                .m2     = {.port = STEP_CH2_M2_GPIO_Port,       .pin = STEP_CH2_M2_Pin},
-                                .m3     = {.port = STEP_CH2_M3_GPIO_Port,       .pin = STEP_CH2_M3_Pin},
-                                .reset  = {.port = STEP_CH2_RESET_GPIO_Port,    .pin = STEP_CH2_RESET_Pin},
-                                .st     = {.port = STEP_CH2_ST_GPIO_Port,       .pin = STEP_CH2_ST_Pin},
+                                .clk    = {.port = STEP_CH5_CLK_GPIO_Port,      .pin = STEP_CH5_CLK_Pin},
+                                .dir    = {.port = STEP_CH5_DIR_GPIO_Port,      .pin = STEP_CH5_DIR_Pin},
+                                .en     = {.port = STEP_CH5_EN_GPIO_Port,       .pin = STEP_CH5_EN_Pin},
+                                .m1     = {.port = STEP_CH5_M1_GPIO_Port,       .pin = STEP_CH5_M1_Pin},
+                                .m2     = {.port = STEP_CH5_M2_GPIO_Port,       .pin = STEP_CH5_M2_Pin},
+                                .m3     = {.port = STEP_CH5_M3_GPIO_Port,       .pin = STEP_CH5_M3_Pin},
+                                .reset  = {.port = STEP_CH5_RESET_GPIO_Port,    .pin = STEP_CH5_RESET_Pin},
+                                .st     = {.port = STEP_CH5_ST_GPIO_Port,       .pin = STEP_CH5_ST_Pin},
                         },
-                        .state = cylib_step_motor_state_init,
+                        .state = cylib_step_motor_state_free,
                         .step_sp = 0,
                         .step_cb = 0,
                         .step_error = 0,
@@ -70,16 +70,16 @@ cylib_step_motor_def cylib_step_motor = {
                         .step_degree_error = 0.0f,
                 }, {
                         .pin = {
-                                .clk    = {.port = STEP_CH3_CLK_GPIO_Port, .pin = STEP_CH3_CLK_Pin},
-                                .dir    = {.port = STEP_CH3_DIR_GPIO_Port, .pin = STEP_CH3_DIR_Pin},
-                                .en     = {.port = STEP_CH3_EN_GPIO_Port, .pin = STEP_CH3_EN_Pin},
-                                .m1     = {.port = STEP_CH3_M1_GPIO_Port, .pin = STEP_CH3_M1_Pin},
-                                .m2     = {.port = STEP_CH3_M2_GPIO_Port, .pin = STEP_CH3_M2_Pin},
-                                .m3     = {.port = STEP_CH3_M3_GPIO_Port, .pin = STEP_CH3_M3_Pin},
-                                .reset  = {.port = STEP_CH3_RESET_GPIO_Port, .pin = STEP_CH3_RESET_Pin},
-                                .st     = {.port = STEP_CH3_ST_GPIO_Port, .pin = STEP_CH3_ST_Pin},
+                                .clk    = {.port = STEP_CH6_CLK_GPIO_Port, .pin = STEP_CH6_CLK_Pin},
+                                .dir    = {.port = STEP_CH6_DIR_GPIO_Port, .pin = STEP_CH6_DIR_Pin},
+                                .en     = {.port = STEP_CH6_EN_GPIO_Port, .pin = STEP_CH6_EN_Pin},
+                                .m1     = {.port = STEP_CH6_M1_GPIO_Port, .pin = STEP_CH6_M1_Pin},
+                                .m2     = {.port = STEP_CH6_M2_GPIO_Port, .pin = STEP_CH6_M2_Pin},
+                                .m3     = {.port = STEP_CH6_M3_GPIO_Port, .pin = STEP_CH6_M3_Pin},
+                                .reset  = {.port = STEP_CH6_RESET_GPIO_Port, .pin = STEP_CH6_RESET_Pin},
+                                .st     = {.port = STEP_CH6_ST_GPIO_Port, .pin = STEP_CH6_ST_Pin},
                         },
-                        .state = cylib_step_motor_state_init,
+                        .state = cylib_step_motor_state_free,
                         .step_sp = 0,
                         .step_cb = 0,
                         .step_error = 0,
@@ -250,6 +250,9 @@ void cylib_step_motor_run_async_motor0(int32_t speed, int32_t step)
     if (cylib_step_motor.instance[0].state != cylib_step_motor_state_free){
         return;
     }
+	
+	if (step == 0)
+		return;
 
     if (cylib_step_motor.instance[0].step_clk_state !=
         HAL_GPIO_ReadPin(cylib_step_motor.instance[0].pin.clk.port,
@@ -285,6 +288,9 @@ void cylib_step_motor_run_async_motor1(int32_t speed, int32_t step)
         return;
     }
 
+	if (step == 0)
+		return;
+	
     if (cylib_step_motor.instance[1].step_clk_state !=
         HAL_GPIO_ReadPin(cylib_step_motor.instance[1].pin.clk.port,
                          cylib_step_motor.instance[1].pin.clk.pin)){
@@ -320,6 +326,9 @@ void cylib_step_motor_run_async_motor2(int32_t speed, int32_t step)
     if (cylib_step_motor.instance[2].state != cylib_step_motor_state_free){
         return;
     }
+	
+	if (step == 0)
+		return;
 
     if (cylib_step_motor.instance[2].step_clk_state !=
         HAL_GPIO_ReadPin(cylib_step_motor.instance[2].pin.clk.port,
@@ -346,6 +355,21 @@ void cylib_step_motor_run_async_motor2(int32_t speed, int32_t step)
 }
 
 
+
+
+
+
+
+void cylib_step_motor_stop_0(void)
+{
+
+}
+
+
+void cylib_step_motor_stop_1(void)
+{
+
+}
 
 
 
@@ -411,6 +435,11 @@ void cylib_step_motor_timer_callback(int x)
         }
     }
 }
+
+
+
+
+
 
 
 

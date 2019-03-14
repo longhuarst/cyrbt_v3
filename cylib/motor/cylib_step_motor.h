@@ -82,8 +82,12 @@ extern void cylib_step_motor_timer_callback0(void);
 extern void cylib_step_motor_timer_callback1(void);
 extern void cylib_step_motor_timer_callback2(void);
 
+void cylib_step_motor_run_async_motor0(int32_t speed, int32_t step);
+void cylib_step_motor_run_async_motor1(int32_t speed, int32_t step);
+void cylib_step_motor_run_async_motor2(int32_t speed, int32_t step);
 
 
+void cylib_step_motor_block_wait_for_all(void);
 
 //插补走直线
 //参数1 目标坐标
