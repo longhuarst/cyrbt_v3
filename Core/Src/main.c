@@ -218,6 +218,16 @@ int main(void)
 	
 	//-------------------------Ð£×¼Íê±Ï----------------
 	
+	cylib_controller_move(0,150,150,100);
+	
+	
+	HAL_Delay(10*1000);
+	
+	cylib_controller_move(0,140,100,100);
+	
+	HAL_Delay(10*1000);
+	
+	cylib_controller_move(-50,140,100,100);
 	
 	
 	

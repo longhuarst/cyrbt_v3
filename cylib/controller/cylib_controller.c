@@ -27,7 +27,7 @@ void cylib_controller_init(void)
 
 void cylib_controller_move(float x, float y, float z, int speed)
 {
-	
+	static float angle_history = 0.0f;
 	
 	float outdg, indg, yawdg;
 	cylib_abb_calc(x, y, z, &indg, &outdg, &yawdg);
@@ -40,13 +40,20 @@ void cylib_controller_move(float x, float y, float z, int speed)
 	
 	//水平电机
 	{
-		float angle = 0.0f;
+		float angle = angle_history;
 		
 		printf("\r\n\r\n----------\r\n");
-		printf("current deg = %f , sp deg = %f\r\n",angle, indg);
+		printf("yaw current deg = %f , sp deg = %f\r\n",angle, yawdg);
 		printf("----------\r\n");
 		
 		int32_t step = (yawdg - angle) / 0.00140625f;
+		
+		
+		cylib_step_motor_run_async_motor2(100,step); //水平
+		
+		cylib_step_motor_block_wait_for_all();//等待电机完成
+		
+		angle_history = yawdg;
 	}
 	
 	//内电机

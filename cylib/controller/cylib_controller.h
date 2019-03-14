@@ -24,5 +24,7 @@ extern cylib_controller_def cylib_controller;
 
 extern void cylib_controller_init(void);
 
+extern void cylib_controller_move(float x, float y, float z, int speed);
+
 
 #endif //CYRBT_V3_CYLIB_CONTROLLER_H
