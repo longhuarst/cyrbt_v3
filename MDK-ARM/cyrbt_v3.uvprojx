@@ -685,6 +685,36 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>cylib/b</GroupName>
+          <Files>
+            <File>
+              <FileName>b.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\cylib\b\b.c</FilePath>
+            </File>
+            <File>
+              <FileName>b.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\cylib\b\b.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>cylib/delta</GroupName>
+          <Files>
+            <File>
+              <FileName>delta.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\cylib\delta\delta.c</FilePath>
+            </File>
+            <File>
+              <FileName>delta.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\cylib\delta\delta.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>

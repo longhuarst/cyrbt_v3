@@ -34,6 +34,8 @@
 "cyrbt_v3\cylib_abb.o"
 "cyrbt_v3\cylib_location.o"
 "cyrbt_v3\cylib_controller.o"
+"cyrbt_v3\b.o"
+"cyrbt_v3\delta.o"
 --library_type=microlib --strict --scatter "cyrbt_v3\cyrbt_v3.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

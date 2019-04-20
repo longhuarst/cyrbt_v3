@@ -51,6 +51,7 @@
 
 
 #include "../../cylib/cylib.h"
+//#include "stm32f1xx_hal_rcc.h"
 
 /* USER CODE END Includes */
 
@@ -83,6 +84,30 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+uint64_t user_timestamp(void)
+{
+	return ((uint64_t)TIM5->CNT << 48) |
+		((uint64_t)TIM4->CNT << 32) |
+		((uint64_t)TIM3->CNT << 16) |
+		((uint64_t)TIM2->CNT << 0 ) ;
+}
+
+void user_delay_us(uint32_t delay)
+{
+	uint64_t ts1 = user_timestamp();
+	uint64_t ts2;
+	
+	
+	do{
+		ts2 = user_timestamp();
+		
+		if (ts2 - ts1 >= delay){
+			break;
+		}
+	}while(1);
+	
+}
 
 /* USER CODE END 0 */
 
@@ -130,86 +155,199 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 
+	HAL_TIM_Base_Start(&htim2);
+	HAL_TIM_Base_Start(&htim3);
+	HAL_TIM_Base_Start(&htim4);
+	HAL_TIM_Base_Start(&htim5);
+
+
     cylib_init();//鍒濆鍖朇YLIB搴?
 	
+	if (!__HAL_RCC_GET_FLAG(RCC_FLAG_SFTRST)){
+		printf("wait for cmd \r\n");
 	
-	
-	
-	while (cylib_angle_wait_init() != 0x7u){
-		
-		printf("wait angle sensors inited !\r\n");
-		HAL_Delay(1000);
-		
-		
-	}
-	printf("all angle sensors has been inited !\r\n");
-
-//	cylib_step_motor_run_async_motor0(20,10000);
-//	cylib_step_motor_run_async_motor1(20,10000);
-	
-	//电机校准 【水平】
-	if (cylib_switch_get_status(3) == false){
-		//旋转180*1.2度
-		cylib_step_motor_run_async_motor2(100,-128000*1.2);
-		
-		while(cylib_switch_get_status(3) == false);
-	
-		NVIC_SystemReset();		
+		while(!cylib_gcoder_polling());
 	}
 	
-	HAL_Delay(12000);//等待12秒 惯导稳定
 	
-	//先校准内电机
-	for (int i=0;i<10;++i)
+	
+	//选择机械臂类型
+	
+	
+	
+	
+	//////////////////////////////////////////平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂
 	{
-		//读取惯导0数据
-		float angle = 0.0f;
-		while (cylib_angle_get(0,&angle) == false);
-		printf("motor1 angle =  %f\r\n",angle);
 		
-		//电机2 角度为 45度
-		int32_t step = (45.0f - angle ) / 0.00046875f;
+		//j28接中间电机的限位开关   CH3
+		//j18接中心电机[2]
+		//j29接上下电机的限位开关   CH4
+		//j17接中间电机[1]
+		//j16接上下电机[0]
 		
-		printf("error degree = %f , step = %d\r\n",45-angle, step);
+		//电机校准 【水平】
+		if (cylib_switch_get_status(3) == false){
+			//旋转180*1.2度
+			cylib_step_motor_run_async_motor2(100,-128000*1.2);
+			
+			while(cylib_switch_get_status(3) == false);
 		
-		cylib_step_motor_run_async_motor1(100,step);
+			NVIC_SystemReset();		
+		}
 		
-		cylib_step_motor_block_wait_for_all();//等待电机完成
 		
-		printf("motor1 complete \r\n");
+		//校准【中间】电机
+		
+		cylib_step_motor_io_write(cylib_step_motor.instance[1].pin.dir,GPIO_PIN_SET);
+		
+		while(1){
+			
+			if (HAL_GPIO_ReadPin(Limit_SW_CH3_GPIO_Port,Limit_SW_CH3_Pin)){
+				break;
+			}
+			
+			
+			cylib_step_motor_io_write(cylib_step_motor.instance[1].pin.clk,GPIO_PIN_SET);
+			user_delay_us(100);
+			cylib_step_motor_io_write(cylib_step_motor.instance[1].pin.clk,GPIO_PIN_RESET);
+			user_delay_us(100);
+		}
+		
+		
+		while(1){
+			
+			if (HAL_GPIO_ReadPin(Limit_SW_CH4_GPIO_Port,Limit_SW_CH4_Pin)){
+				break;
+			}
+			
+			
+			cylib_step_motor_io_write(cylib_step_motor.instance[0].pin.clk,GPIO_PIN_SET);
+			user_delay_us(100);
+			cylib_step_motor_io_write(cylib_step_motor.instance[0].pin.clk,GPIO_PIN_RESET);
+			user_delay_us(100);
+		}
+		
+		
+		
+		
+		///////////////////////////////////到达校准位置到达校准位置到达校准位置到达校准位置
+		
+		
+		cylib_step_motor_io_write(cylib_step_motor.instance[1].pin.dir,GPIO_PIN_RESET);
+//6400 90都
+		for (int i=0; i< 72000; ++i){
+			
+			cylib_step_motor_io_write(cylib_step_motor.instance[1].pin.clk,GPIO_PIN_SET);
+			user_delay_us(100);
+			cylib_step_motor_io_write(cylib_step_motor.instance[1].pin.clk,GPIO_PIN_RESET);
+			user_delay_us(100);
+		}
+		
+		
+		
+		
 	}
+	//////////////////////////////////////////平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂
 	
-	printf("-------------------- \r\n");
 	
-	//电机校准外电机
-	for (int i=0;i<10;++i)
+	
+	
+	
+	
+	while(1);
+	
+	
+	
+	
+	//////////////////////////////////////////四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴
 	{
-		//读取惯导0数据
-		float angle = 0.0f;
-		while (cylib_angle_get(1,&angle) == false);
-		printf("motor0 angle =  %f\r\n",angle);
-		
-		//电机2 角度为 45度
-		int32_t step = -(-45.0f - angle ) / 0.00046875f;
-		
-		printf("error degree = %f , step = %d\r\n",-45-angle, step);
-		
-		cylib_step_motor_run_async_motor0(100,step);
-		
-		cylib_step_motor_block_wait_for_all();//等待电机完成
-		
-		printf("motor0 complete \r\n");
-	}
 	
-	printf("-----------------\r\n");
-	
-	for (int i=0;i<10;++i){
-		HAL_Delay(1000);
-		printf("angle 0 = %f\r\n",cylib_angle[0].y);
-		printf("angle 1 = %f\r\n",cylib_angle[1].y);
-		printf("angle 2 = %f\r\n",cylib_angle[2].y);
+		
+		
+		while (cylib_angle_wait_init() != 0x7u){
+			
+			printf("wait angle sensors inited !\r\n");
+			HAL_Delay(1000);
+			
+			
+		}
+		printf("all angle sensors has been inited !\r\n");
 
+	//	cylib_step_motor_run_async_motor0(20,10000);
+	//	cylib_step_motor_run_async_motor1(20,10000);
+		
+		//电机校准 【水平】
+		if (cylib_switch_get_status(3) == false){
+			//旋转180*1.2度
+			cylib_step_motor_run_async_motor2(100,-128000*1.2);
+			
+			while(cylib_switch_get_status(3) == false);
+		
+			NVIC_SystemReset();		
+		}
+		
+		HAL_Delay(12000);//等待12秒 惯导稳定
+		
+		//先校准内电机
+		for (int i=0;i<10;++i)
+		{
+			//读取惯导0数据
+			float angle = 0.0f;
+			while (cylib_angle_get(0,&angle) == false);
+			printf("motor1 angle =  %f\r\n",angle);
+			
+			//电机2 角度为 45度
+			int32_t step = (45.0f - angle ) / 0.00046875f;
+			
+			printf("error degree = %f , step = %d\r\n",45-angle, step);
+			
+			cylib_step_motor_run_async_motor1(100,step);
+			
+			cylib_step_motor_block_wait_for_all();//等待电机完成
+			
+			printf("motor1 complete \r\n");
+		}
+		
+		printf("-------------------- \r\n");
+		
+		//电机校准外电机
+		for (int i=0;i<10;++i)
+		{
+			//读取惯导0数据
+			float angle = 0.0f;
+			while (cylib_angle_get(1,&angle) == false);
+			printf("motor0 angle =  %f\r\n",angle);
+			
+			//电机2 角度为 45度
+			int32_t step = -(-45.0f - angle ) / 0.00046875f;
+			
+			printf("error degree = %f , step = %d\r\n",-45-angle, step);
+			
+			cylib_step_motor_run_async_motor0(100,step);
+			
+			cylib_step_motor_block_wait_for_all();//等待电机完成
+			
+			printf("motor0 complete \r\n");
+		}
+		
+		printf("-----------------\r\n");
+		
+		for (int i=0;i<10;++i){
+			HAL_Delay(1000);
+			printf("angle 0 = %f\r\n",cylib_angle[0].y);
+			printf("angle 1 = %f\r\n",cylib_angle[1].y);
+			printf("angle 2 = %f\r\n",cylib_angle[2].y);
+
+		}
+		
 	}
+		
+	
+	//////////////////////////////////////////四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴
+	
+	
+	
+	
 	
 	
 	//清除坐标
@@ -218,6 +356,8 @@ int main(void)
 	
 	//-------------------------校准完毕----------------
 	
+	
+	#if 0
 	cylib_controller_move(0,150,150,100);
 	
 	
@@ -231,35 +371,43 @@ int main(void)
 	
 	
 	
-	while(1){
-		HAL_Delay(1000);
-		
-		if (cylib_switch_get_status(0)){
-			printf("sw0 on\r\n");
-		}else{
-			printf("sw0 off\r\n");
-		}
-		
-		if (cylib_switch_get_status(1)){
-			printf("sw1 on\r\n");
-		}else{
-			printf("sw1 off\r\n");
-		}
-		
-		if (cylib_switch_get_status(2)){
-			printf("sw2 on\r\n");
-		}else{
-			printf("sw2 off\r\n");
-		}
-		
-		if (cylib_switch_get_status(3)){
-			printf("sw3 on\r\n");
-		}else{
-			printf("sw3 off\r\n");
-		}
-		
-	}
+//	while(1){
+//		HAL_Delay(1000);
+//		
+//		if (cylib_switch_get_status(0)){
+//			printf("sw0 on\r\n");
+//		}else{
+//			printf("sw0 off\r\n");
+//		}
+//		
+//		if (cylib_switch_get_status(1)){
+//			printf("sw1 on\r\n");
+//		}else{
+//			printf("sw1 off\r\n");
+//		}
+//		
+//		if (cylib_switch_get_status(2)){
+//			printf("sw2 on\r\n");
+//		}else{
+//			printf("sw2 off\r\n");
+//		}
+//		
+//		if (cylib_switch_get_status(3)){
+//			printf("sw3 on\r\n");
+//		}else{
+//			printf("sw3 off\r\n");
+//		}
+//		
+//	}
+//	
 	
+	#endif
+	
+	
+	printf(" \
+------------------------------\r\n \
+system run into polling ..... \r\n \
+------------------------------\r\n");
 	
 //	cylib_step_motor_run_async_motor0(20,10000);
 //	cylib_step_motor_run_async_motor1(20,10000);

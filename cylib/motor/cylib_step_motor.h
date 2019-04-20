@@ -78,6 +78,8 @@ extern cylib_step_motor_def cylib_step_motor;
 
 extern void cylib_step_motor_init(void);
 
+extern void cylib_step_motor_io_write(cylib_step_motor_baseio_def io,GPIO_PinState state);
+
 extern void cylib_step_motor_timer_callback0(void);
 extern void cylib_step_motor_timer_callback1(void);
 extern void cylib_step_motor_timer_callback2(void);

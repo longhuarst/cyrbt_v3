@@ -7,13 +7,14 @@
 
 
 
+#include <stdbool.h>
 
 
-
+extern int cylib_gcoder_type;
 
 extern void cylib_gcoder_init(void);
 
-extern void cylib_gcoder_polling(void);
+extern bool cylib_gcoder_polling(void);
 
 
 

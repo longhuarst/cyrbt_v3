@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
-
+#include <stdio.h>
 
 
 void cylib_abb_init(void)
@@ -29,6 +29,8 @@ void cylib_abb_init(void)
 //													&indg, &outdg, &yawdg
 void cylib_abb_calc(float x, float y, float z, float *angle0, float *angle1, float *angle2)
 {
+	
+	printf("x = %f, y = %f, z = %f \r\n",x,y,z);
 	float R = sqrt(x*x+y*y);
 	
 	#define Z_C (131)
