@@ -12,7 +12,7 @@
 
 #include "../controller/cylib_controller.h"
 #include "../b/b.h"
-
+#include "../delta/delta.h"
 
 #define cylib_gcoder_uart (0)
 
@@ -89,6 +89,8 @@ void cylib_gcoder_decoder_g(void)
 				}//cylib_step_motor_run_point_runin(point,100);
 				else if (cylib_gcoder_type == 2){
 					cylib_b_move(x,y,z);
+				}else if (cylib_gcoder_type == 1){
+					cylib_delta_move(x,y,z);
 				}
             }
             break;

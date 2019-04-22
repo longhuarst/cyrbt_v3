@@ -49,7 +49,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "../../cylib/cylib.h"
 //#include "stm32f1xx_hal_rcc.h"
 
@@ -163,11 +166,11 @@ int main(void)
 
     cylib_init();//鍒濆鍖朇YLIB搴?
 	
-	if (!__HAL_RCC_GET_FLAG(RCC_FLAG_SFTRST)){
+	//if (!__HAL_RCC_GET_FLAG(RCC_FLAG_SFTRST)){
 		printf("wait for cmd \r\n");
 	
 		while(!cylib_gcoder_polling());
-	}
+	//}
 	
 	
 	
@@ -175,10 +178,103 @@ int main(void)
 	
 	
 	
+	if (cylib_gcoder_type == 1){
+		//并联臂
 	
-	//////////////////////////////////////////平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂
-	{
+		while (cylib_angle_wait_init() != 0xfu){
+			
+			printf("wait angle sensors inited !\r\n");
+			HAL_Delay(1000);
+			
+			
+		}
+		printf("all angle sensors has been inited !\r\n");
+
 		
+		
+		for (int i=0;i<50;++i){
+			float angle0,angle1,angle2;
+			while (cylib_angle_get(0,&angle0) == false);
+			while (cylib_angle_get(1,&angle1) == false);
+			while (cylib_angle_get(2,&angle2) == false);
+			
+			#define offset_max (10.0f);
+			float angle0_max = -17.87-offset_max;
+			float angle1_max = -20.23-offset_max;
+			float angle2_max = -16.69-offset_max;
+			
+			float error1 =  (angle0_max - angle0 );
+			float error2 =  (angle1_max - angle1 );
+			float error3 =  (angle2_max - angle2 );
+			
+			#define C_Motor_Step_Deg (1.8/128/10) //每个脉冲的角度
+
+				
+			//计算步数
+			int32_t step1 =  (error1/C_Motor_Step_Deg);
+			int32_t step2 =  (error2/C_Motor_Step_Deg);
+			int32_t step3 =  (error3/C_Motor_Step_Deg);
+			
+			
+			for (int i=0;i<abs(step1); ++i){
+				if (step1 > 0){
+					//set
+					cylib_step_motor_io_write(cylib_step_motor.instance[0].pin.dir,GPIO_PIN_SET);
+				}else{
+					//reset
+					cylib_step_motor_io_write(cylib_step_motor.instance[0].pin.dir,GPIO_PIN_RESET);
+				} 
+				
+				cylib_step_motor_io_write(cylib_step_motor.instance[0].pin.clk,GPIO_PIN_SET);
+				user_delay_us(100);
+				cylib_step_motor_io_write(cylib_step_motor.instance[0].pin.clk,GPIO_PIN_RESET);
+				user_delay_us(100);
+			}
+			
+			for (int i=0;i<abs(step2); ++i){
+				if (step2 > 0){
+					//set
+					cylib_step_motor_io_write(cylib_step_motor.instance[1].pin.dir,GPIO_PIN_SET);
+				}else{
+					//reset
+					cylib_step_motor_io_write(cylib_step_motor.instance[1].pin.dir,GPIO_PIN_RESET);
+				} 
+				
+				cylib_step_motor_io_write(cylib_step_motor.instance[1].pin.clk,GPIO_PIN_SET);
+				user_delay_us(100);
+				cylib_step_motor_io_write(cylib_step_motor.instance[1].pin.clk,GPIO_PIN_RESET);
+				user_delay_us(100);
+			}
+			
+			for (int i=0;i<abs(step3); ++i){
+				if (step3 > 0){
+					//set
+					cylib_step_motor_io_write(cylib_step_motor.instance[2].pin.dir,GPIO_PIN_SET);
+				}else{
+					//reset
+					cylib_step_motor_io_write(cylib_step_motor.instance[2].pin.dir,GPIO_PIN_RESET);
+				} 
+				
+				cylib_step_motor_io_write(cylib_step_motor.instance[2].pin.clk,GPIO_PIN_SET);
+				user_delay_us(100);
+				cylib_step_motor_io_write(cylib_step_motor.instance[2].pin.clk,GPIO_PIN_RESET);
+				user_delay_us(100);
+			}
+
+				
+			
+			
+			HAL_Delay(200);
+		}
+		
+		//校准完成
+		
+		
+	
+	}else if (cylib_gcoder_type == 2){
+		//平行臂
+		
+			
 		//j28接中间电机的限位开关   CH3
 		//j18接中心电机[2]
 		//j29接上下电机的限位开关   CH4
@@ -243,25 +339,8 @@ int main(void)
 			user_delay_us(100);
 		}
 		
-		
-		
-		
-	}
-	//////////////////////////////////////////平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂平行臂
-	
-	
-	
-	
-	
-	
-	while(1);
-	
-	
-	
-	
-	//////////////////////////////////////////四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴
-	{
-	
+	}else if (cylib_gcoder_type == 3 || cylib_gcoder_type == 4){
+		//四轴  六轴
 		
 		
 		while (cylib_angle_wait_init() != 0x7u){
@@ -341,9 +420,9 @@ int main(void)
 		}
 		
 	}
-		
 	
-	//////////////////////////////////////////四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴四轴
+	
+	//while(1);
 	
 	
 	

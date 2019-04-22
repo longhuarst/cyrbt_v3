@@ -32,6 +32,9 @@ cyrbt_v3\main.o: ../Core/Inc/dma.h
 cyrbt_v3\main.o: ../Core/Inc/tim.h
 cyrbt_v3\main.o: ../Core/Inc/usart.h
 cyrbt_v3\main.o: ../Core/Inc/gpio.h
+cyrbt_v3\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+cyrbt_v3\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+cyrbt_v3\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 cyrbt_v3\main.o: ../Core/Src/../../cylib/cylib.h
 cyrbt_v3\main.o: ../Core/Src/../../cylib/motor/cylib_step_motor.h
 cyrbt_v3\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

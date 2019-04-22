@@ -35,3 +35,5 @@ cyrbt_v3\cylib_gcoder.o: ..\cylib\gcoder\../serial/cylib_serial.h
 cyrbt_v3\cylib_gcoder.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 cyrbt_v3\cylib_gcoder.o: ..\cylib\gcoder\../controller/cylib_controller.h
 cyrbt_v3\cylib_gcoder.o: ..\cylib\gcoder\../b/b.h
+cyrbt_v3\cylib_gcoder.o: ..\cylib\gcoder\../delta/delta.h
+cyrbt_v3\cylib_gcoder.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
